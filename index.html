@@ -2344,46 +2344,47 @@ textarea:-webkit-autofill:focus {
     </script>
 
     <script>
-      document.getElementById('subscribe-form').addEventListener('submit', async function (e) {
-        e.preventDefault(); // Evita que la página se recargue
+  document.getElementById('contact-form').addEventListener('submit', async function (e) {
+    e.preventDefault(); 
 
-        const email = document.getElementById('email-input').value;
-        const btn = document.getElementById('submit-btn');
-        const message = document.getElementById('form-message');
+    const btn = document.getElementById('submit-btn');
+    const message = document.getElementById('form-message');
 
-        // Estado de carga
-        btn.innerText = 'Sending...';
-        btn.disabled = true;
+    // Obtenemos los valores por ID
+    const formData = {
+      fullname: document.getElementById('name-input').value,
+      email: document.getElementById('email-input').value,
+      phone: document.getElementById('phone-input').value,
+      message: document.getElementById('message-input').value
+    };
 
-        try {
-          // Enviar datos a Flask
-          const response = await fetch('/subscribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-          });
+    btn.innerText = 'Sending...';
+    btn.disabled = true;
 
-          const data = await response.json();
-
-          if (response.ok) {
-            message.innerText = '¡Gracias! Te has suscrito exitosamente.';
-            message.style.color = 'var(--gold)'; // Le damos el color dorado de tu diseño
-            this.reset(); // Limpia el input
-          } else {
-            message.innerText = data.error || 'Ocurrió un error.';
-            message.style.color = 'red';
-          }
-        } catch (error) {
-          message.innerText = 'Error de conexión con el servidor.';
-          message.style.color = 'red';
-        } finally {
-          // Restaurar el botón
-          btn.innerText = 'Subscribe';
-          btn.disabled = false;
-        }
+    try {
+      const response = await fetch('/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
-    </script>
 
+      if (response.ok) {
+        message.innerText = '¡Mensaje enviado con éxito!';
+        message.style.color = 'var(--gold)';
+        this.reset(); 
+      } else {
+        message.innerText = 'Ocurrió un error. Inténtalo de nuevo.';
+        message.style.color = 'red';
+      }
+    } catch (error) {
+      message.innerText = 'Error de conexión.';
+      message.style.color = 'red';
+    } finally {
+      btn.innerText = 'Send message';
+      btn.disabled = false;
+    }
+  });
+</script>
 </body>
 
 </html>
