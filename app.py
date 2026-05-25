@@ -32,7 +32,7 @@ def subscribe():
         msg = Message(
             subject=f"Nuevo suscriptor en Aurum: {correo_suscriptor}",
             sender=app.config['MAIL_USERNAME'],
-            recipients=['sebasolivo3104@gmail.com', 'olivovaleria265@gmail.com'] 
+            recipients=['olivovaleria265@gmail.com'] 
         )
         msg.body = f"¡Felicidades! Alguien se ha suscrito a tu newsletter.\nCorreo: {correo_suscriptor}"
 
