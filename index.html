@@ -1,1543 +1,2310 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AURUM — Fine Jewelry</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
-<style>
-:root {
-
-  /*dsfsdfdsd*/
-  --black: #080807;
-  --black-2: #0f0f0d;
-  --black-3: #161612;
-  --black-4: #1e1e19;
-  --gold: #C9A84C;
-  --gold-light: #E8D5A3;
-  --gold-deep: #A07828;
-  --gold-muted: #7a5c2a;
-  --champagne: #F5EDD4;
-  --text-dim: #5a5140;
-  --text-mid: #8a7a55;
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans: 'Jost', sans-serif;
-}
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--black);
-  color: var(--champagne);
-  font-family: var(--sans);
-  font-weight: 300;
-  overflow-x: hidden;
-  cursor: default;
-}
-
-::selection { background: var(--gold-deep); color: var(--champagne); }
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--black-2); }
-::-webkit-scrollbar-thumb { background: var(--gold-deep); }
-
-/* ── CUSTOM CURSOR ── */
-.cursor {
-  position: fixed; width: 8px; height: 8px;
-  background: var(--gold); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transition: transform 0.15s ease, opacity 0.3s;
-  transform: translate(-50%, -50%);
-}
-.cursor-ring {
-  position: fixed; width: 32px; height: 32px;
-  border: 0.5px solid rgba(201,168,76,0.5); border-radius: 50%;
-  pointer-events: none; z-index: 9998;
-  transition: transform 0.35s ease, width 0.3s, height 0.3s, opacity 0.3s;
-  transform: translate(-50%, -50%);
-}
-
-/* ── GRAIN OVERLAY ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  opacity: 0.028;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-}
-
-/* ── NAVBAR ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 60px; height: 76px;
-  background: linear-gradient(to bottom, rgba(8,8,7,0.96) 0%, transparent 100%);
-  border-bottom: 0.5px solid rgba(201,168,76,0.08);
-  transition: background 0.4s;
-}
-nav.scrolled {
-  background: rgba(8,8,7,0.97);
-  border-bottom-color: rgba(201,168,76,0.14);
-}
-
-.nav-logo {
-  display: flex; align-items: center; gap: 11px;
-  text-decoration: none;
-}
-.nav-logo-icon {
-  width: 30px; height: 30px;
-}
-.nav-logo-text {
-  font-family: var(--serif); font-size: 20px; font-weight: 500;
-  letter-spacing: 0.35em; color: var(--gold);
-}
-
-.nav-links {
-  display: flex; align-items: center; gap: 36px;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-mid); text-decoration: none; font-weight: 400;
-  transition: color 0.3s;
-  position: relative;
-}
-.nav-links a::after {
-  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
-  height: 0.5px; background: var(--gold);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.35s ease;
-}
-.nav-links a:hover { color: var(--gold-light); }
-.nav-links a:hover::after { transform: scaleX(1); }
-
-.nav-icons {
-  display: flex; align-items: center; gap: 24px;
-}
-.nav-icon-btn {
-  background: none; border: none; cursor: pointer;
-  color: var(--text-mid); transition: color 0.3s;
-  position: relative;
-}
-.nav-icon-btn:hover { color: var(--gold); }
-.nav-icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-.cart-badge {
-  position: absolute; top: -5px; right: -5px;
-  width: 14px; height: 14px; background: var(--gold);
-  border-radius: 50%; font-size: 8px; font-weight: 500;
-  color: var(--black); display: flex; align-items: center; justify-content: center;
-}
-
-/* ── HERO ── */
-.hero {
-  position: relative; min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 1fr;
-  align-items: center; overflow: hidden;
-  padding: 76px 0 0;
-}
-
-.hero-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 70% 40%, rgba(201,168,76,0.04) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.02) 0%, transparent 60%);
-}
-
-.hero-left {
-  padding: 80px 60px 80px 80px;
-  position: relative; z-index: 5;
-}
-
-.hero-eyebrow {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 28px;
-}
-.hero-eyebrow span {
-  font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
-  color: var(--gold); font-weight: 400;
-}
-.eyebrow-line {
-  height: 0.5px; width: 50px; background: var(--gold); opacity: 0.6;
-}
-
-.hero-headline {
-  font-family: var(--serif); font-size: clamp(52px, 5vw, 80px);
-  font-weight: 300; line-height: 1.06;
-  color: var(--champagne); margin-bottom: 6px;
-}
-.hero-headline em {
-  font-style: italic; color: var(--gold);
-  display: block;
-}
-
-.hero-sub {
-  font-size: 12px; line-height: 1.9; color: var(--text-dim);
-  max-width: 340px; margin: 28px 0 44px;
-  letter-spacing: 0.03em;
-}
-
-.btn-gold {
-  display: inline-flex; align-items: center; gap: 12px;
-  background: transparent;
-  border: 0.5px solid var(--gold);
-  color: var(--gold);
-  font-family: var(--sans); font-size: 10px;
-  letter-spacing: 0.25em; text-transform: uppercase; font-weight: 400;
-  padding: 16px 36px; text-decoration: none;
-  cursor: pointer;
-  transition: background 0.4s, color 0.4s, box-shadow 0.4s;
-  position: relative; overflow: hidden;
-}
-.btn-gold::before {
-  content: ''; position: absolute; inset: 0;
-  background: var(--gold); transform: translateX(-101%);
-  transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
-}
-.btn-gold:hover::before { transform: translateX(0); }
-.btn-gold:hover { color: var(--black); box-shadow: 0 0 30px rgba(201,168,76,0.18); }
-.btn-gold span, .btn-gold svg { position: relative; z-index: 1; }
-.btn-gold svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; transition: transform 0.3s; }
-.btn-gold:hover svg { transform: translateX(4px); }
-
-.hero-stats {
-  display: flex; gap: 40px; margin-top: 52px;
-}
-.stat-item {}
-.stat-num {
-  font-family: var(--serif); font-size: 32px; font-weight: 300;
-  color: var(--gold); display: block; line-height: 1;
-}
-.stat-label {
-  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--text-dim); display: block; margin-top: 6px;
-}
-
-/* ── HERO CAROUSEL ── */
-.hero-right {
-  position: relative; height: 100vh; overflow: hidden;
-}
-
-.hero-images {
-  position: relative; height: 100%; display: flex; align-items: center;
-  padding: 80px 60px 80px 0;
-}
-
-.img-card {
-  position: absolute;
-  background: var(--black-3);
-  overflow: hidden;
-  border: 0.5px solid rgba(201,168,76,0.1);
-  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.6s;
-}
-.img-card:hover {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(201,168,76,0.06);
-  z-index: 10;
-}
-
-.img-card-1 {
-  width: 240px; height: 340px;
-  top: 80px; left: -10px;
-  transform: rotate(-4deg);
-  z-index: 4;
-}
-.img-card-2 {
-  width: 200px; height: 290px;
-  top: 140px; left: 190px;
-  transform: rotate(2deg);
-  z-index: 5;
-}
-.img-card-3 {
-  width: 180px; height: 260px;
-  top: 100px; left: 360px;
-  transform: rotate(-2.5deg);
-  z-index: 3;
-}
-.img-card-4 {
-  width: 140px; height: 200px;
-  top: 200px; left: 510px;
-  transform: rotate(3deg);
-  z-index: 2;
-}
-.img-card-5 {
-  width: 120px; height: 180px;
-  top: 260px; left: 620px;
-  transform: rotate(-1.5deg);
-  z-index: 1;
-}
-
-.img-card:hover { transform: rotate(0deg) scale(1.04) translateY(-8px); }
-
-.img-inner {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden; position: relative;
-}
-
-.img-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 12px;
-}
-
-/* Jewelry SVG illustrations */
-.jewel-svg { opacity: 0.7; }
-
-.img-gold-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
-}
-
-/* background patterns per card */
-.img-card-1 .img-placeholder { background: linear-gradient(160deg, #1a1508 0%, #0d0c07 100%); }
-.img-card-2 .img-placeholder { background: linear-gradient(160deg, #141408 0%, #0a0a06 100%); }
-.img-card-3 .img-placeholder { background: linear-gradient(160deg, #180f05 0%, #0d0b06 100%); }
-.img-card-4 .img-placeholder { background: linear-gradient(160deg, #121210 0%, #0a0a09 100%); }
-.img-card-5 .img-placeholder { background: linear-gradient(160deg, #151208 0%, #0b0906 100%); }
-
-.img-label {
-  position: absolute; bottom: 12px; left: 12px;
-  font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-mid);
-}
-
-/* ── SECTION BASE ── */
-section { position: relative; z-index: 2; }
-
-.section-eyebrow {
-  display: flex; align-items: center; justify-content: center; gap: 16px;
-  margin-bottom: 16px;
-}
-.section-eyebrow span {
-  font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
-  color: var(--gold); font-weight: 400;
-}
-.diamond-dot {
-  width: 5px; height: 5px; background: var(--gold);
-  transform: rotate(45deg); flex-shrink: 0;
-}
-.section-title {
-  font-family: var(--serif); font-size: clamp(36px, 4vw, 56px);
-  font-weight: 300; color: var(--champagne);
-  text-align: center; line-height: 1.1;
-}
-.section-title em { font-style: italic; color: var(--gold); }
-
-.divider {
-  width: 60px; height: 0.5px; background: var(--gold-deep);
-  margin: 28px auto 0; opacity: 0.6;
-}
-
-/* ── FEATURED COLLECTIONS ── */
-.collections {
-  padding: 120px 80px;
-  background: var(--black-2);
-}
-
-.collections-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 16px; margin-top: 64px;
-}
-
-.col-card {
-  position: relative; overflow: hidden;
-  background: var(--black-3);
-  border: 0.5px solid rgba(201,168,76,0.1);
-  cursor: pointer;
-  group: true;
-  transition: border-color 0.4s;
-}
-.col-card:hover { border-color: rgba(201,168,76,0.4); }
-
-.col-img {
-  height: 380px;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--black-4); position: relative; overflow: hidden;
-  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-.col-card:hover .col-img { transform: scale(1.04); }
-
-.col-img-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(8,8,7,0.8) 0%, transparent 50%);
-  z-index: 1;
-}
-
-.col-icon {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  opacity: 0.15;
-}
-
-.col-info {
-  padding: 24px 24px 28px; position: relative;
-}
-.col-category {
-  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 8px;
-}
-.col-name {
-  font-family: var(--serif); font-size: 22px; font-weight: 400;
-  color: var(--champagne); margin-bottom: 4px;
-}
-.col-pieces {
-  font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em;
-}
-
-.col-hover-btn {
-  position: absolute; bottom: 24px; right: 24px;
-  width: 40px; height: 40px; border: 0.5px solid rgba(201,168,76,0.3);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--gold); background: transparent; cursor: pointer;
-  transition: background 0.3s, border-color 0.3s;
-}
-.col-card:hover .col-hover-btn {
-  background: var(--gold); color: var(--black); border-color: var(--gold);
-}
-.col-hover-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-
-/* ── BEST SELLERS ── */
-.bestsellers {
-  padding: 120px 80px;
-  background: var(--black);
-}
-
-.bestsellers-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 20px; margin-top: 64px;
-}
-
-.product-card {
-  background: var(--black-3); overflow: hidden;
-  border: 0.5px solid rgba(201,168,76,0.08);
-  transition: border-color 0.4s, box-shadow 0.4s;
-  cursor: pointer;
-}
-.product-card:hover {
-  border-color: rgba(201,168,76,0.3);
-  box-shadow: 0 0 40px rgba(201,168,76,0.04);
-}
-
-.product-img {
-  height: 320px; background: var(--black-4);
-  display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-}
-.product-img-overlay {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(201,168,76,0.04) 0%, transparent 70%);
-}
-.product-img svg { opacity: 0.2; }
-
-.product-badge {
-  position: absolute; top: 16px; left: 16px;
-  background: var(--gold); color: var(--black);
-  font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 5px 10px; font-weight: 500;
-}
-
-.product-info {
-  padding: 24px;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.product-sub {
-  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--gold);
-}
-.product-name {
-  font-family: var(--serif); font-size: 20px; font-weight: 400;
-  color: var(--champagne);
-}
-.product-price {
-  font-family: var(--serif); font-size: 18px; color: var(--gold-light);
-  font-weight: 300; margin-top: 4px;
-}
-
-.product-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px 24px;
-}
-.view-btn {
-  background: none; border: 0.5px solid rgba(201,168,76,0.25);
-  color: var(--text-mid); font-family: var(--sans);
-  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 10px 20px; cursor: pointer;
-  transition: border-color 0.3s, color 0.3s, background 0.3s;
-}
-.view-btn:hover {
-  border-color: var(--gold); color: var(--gold);
-  background: rgba(201,168,76,0.05);
-}
-.wish-btn {
-  background: none; border: none; cursor: pointer;
-  color: var(--text-dim); transition: color 0.3s;
-}
-.wish-btn:hover { color: var(--gold); }
-.wish-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-
-/* ── LUXURY BANNER ── */
-.banner {
-  padding: 120px 80px;
-  background: var(--black-2);
-  position: relative; overflow: hidden;
-  text-align: center;
-}
-
-.banner-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%);
-}
-
-.banner-ornament {
-  display: flex; align-items: center; justify-content: center; gap: 20px;
-  margin-bottom: 32px;
-}
-.ornament-line { height: 0.5px; width: 80px; background: linear-gradient(90deg, transparent, var(--gold-deep)); }
-.ornament-line.r { background: linear-gradient(90deg, var(--gold-deep), transparent); }
-
-.banner-headline {
-  font-family: var(--serif); font-size: clamp(40px, 5vw, 72px);
-  font-weight: 300; line-height: 1.1; color: var(--champagne);
-  max-width: 800px; margin: 0 auto 24px;
-}
-.banner-headline em { font-style: italic; color: var(--gold); }
-
-.banner-sub {
-  font-size: 12px; color: var(--text-dim); letter-spacing: 0.05em;
-  margin-bottom: 48px; max-width: 500px; margin-left: auto; margin-right: auto;
-}
-
-/* ── BRAND STORY ── */
-.story {
-  padding: 120px 80px;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 100px; align-items: center;
-  background: var(--black);
-}
-
-.story-left {}
-.story-eyebrow {
-  font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 24px;
-}
-.story-headline {
-  font-family: var(--serif); font-size: clamp(40px, 4vw, 60px);
-  font-weight: 300; color: var(--champagne); line-height: 1.12;
-  margin-bottom: 32px;
-}
-.story-headline em { font-style: italic; color: var(--gold); }
-
-.story-body {
-  font-size: 13px; line-height: 2; color: var(--text-dim);
-  margin-bottom: 20px; letter-spacing: 0.02em;
-}
-
-.story-feature {
-  display: flex; align-items: flex-start; gap: 16px;
-  margin-top: 36px;
-}
-.feature-icon {
-  width: 40px; height: 40px; flex-shrink: 0;
-  border: 0.5px solid rgba(201,168,76,0.3);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--gold);
-}
-.feature-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-.feature-text-title {
-  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--champagne); margin-bottom: 5px;
-}
-.feature-text-desc {
-  font-size: 12px; color: var(--text-dim); line-height: 1.7;
-}
-
-.story-right {
-  position: relative; height: 600px;
-}
-.story-img-main {
-  position: absolute; inset: 0;
-  background: var(--black-3);
-  border: 0.5px solid rgba(201,168,76,0.1);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-}
-.story-img-accent {
-  position: absolute; bottom: -30px; right: -30px;
-  width: 180px; height: 220px;
-  background: var(--black-4);
-  border: 0.5px solid rgba(201,168,76,0.15);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2;
-}
-.story-gold-line {
-  position: absolute; left: -20px; top: 60px;
-  width: 0.5px; height: 140px; background: var(--gold-deep); opacity: 0.5;
-}
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  padding: 120px 80px;
-  background: var(--black-2);
-}
-
-.test-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 24px; margin-top: 64px;
-}
-
-.test-card {
-  background: var(--black-3);
-  border: 0.5px solid rgba(201,168,76,0.08);
-  padding: 40px 36px;
-  position: relative;
-  transition: border-color 0.4s;
-}
-.test-card:hover { border-color: rgba(201,168,76,0.25); }
-
-.test-quote-mark {
-  font-family: var(--serif); font-size: 80px;
-  color: var(--gold); opacity: 0.15;
-  line-height: 1; position: absolute;
-  top: 20px; left: 32px;
-  font-weight: 300;
-}
-
-.test-text {
-  font-family: var(--serif); font-size: 16px; font-style: italic;
-  color: var(--champagne); line-height: 1.7; margin-bottom: 28px;
-  padding-top: 20px; font-weight: 300;
-}
-
-.test-author { display: flex; align-items: center; gap: 14px; }
-.test-avatar {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: var(--black-4);
-  border: 0.5px solid rgba(201,168,76,0.2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--serif); font-size: 16px; color: var(--gold);
-  font-style: italic;
-}
-.test-name {
-  font-size: 11px; letter-spacing: 0.1em; color: var(--champagne);
-  display: block; margin-bottom: 3px;
-}
-.test-location {
-  font-size: 10px; color: var(--text-dim); letter-spacing: 0.05em;
-}
-
-.test-stars {
-  display: flex; gap: 3px; margin-bottom: 20px;
-}
-.star { color: var(--gold); font-size: 12px; }
-
-/* ── INSTAGRAM GALLERY ── */
-.gallery {
-  padding: 100px 80px;
-  background: var(--black);
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 200px 200px;
-  gap: 8px; margin-top: 56px;
-}
-
-.gallery-item {
-  background: var(--black-3); overflow: hidden;
-  border: 0.5px solid rgba(201,168,76,0.05);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; position: relative;
-  transition: border-color 0.4s;
-}
-.gallery-item.tall { grid-row: 1 / 3; }
-.gallery-item:hover { border-color: rgba(201,168,76,0.3); }
-
-.gallery-hover {
-  position: absolute; inset: 0;
-  background: rgba(8,8,7,0.6);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.3s;
-}
-.gallery-item:hover .gallery-hover { opacity: 1; }
-.gallery-hover svg { width: 24px; height: 24px; color: var(--gold); fill: none; stroke: currentColor; stroke-width: 1.5; }
-
-.gallery-inner {
-  width: 100%; height: 100%;
-  background: var(--black-4);
-  display: flex; align-items: center; justify-content: center;
-}
-.gallery-inner svg { opacity: 0.12; }
-
-/* ── NEWSLETTER ── */
-.newsletter {
-  padding: 100px 80px;
-  background: var(--black-2);
-  text-align: center;
-  position: relative; overflow: hidden;
-}
-
-.newsletter-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 70%);
-}
-
-.newsletter-headline {
-  font-family: var(--serif); font-size: clamp(36px, 4vw, 56px);
-  font-weight: 300; color: var(--champagne); margin-bottom: 16px;
-}
-.newsletter-headline em { font-style: italic; color: var(--gold); }
-.newsletter-sub {
-  font-size: 12px; color: var(--text-dim); max-width: 400px; margin: 0 auto 48px;
-  line-height: 1.8; letter-spacing: 0.03em;
-}
-
-.newsletter-form {
-  display: flex; max-width: 480px; margin: 0 auto;
-  border: 0.5px solid rgba(201,168,76,0.25);
-  position: relative; z-index: 1;
-}
-.newsletter-input {
-  flex: 1; background: transparent;
-  border: none; outline: none;
-  font-family: var(--sans); font-size: 12px; letter-spacing: 0.05em;
-  color: var(--champagne); padding: 18px 24px;
-}
-.newsletter-input::placeholder { color: var(--text-dim); }
-.newsletter-btn {
-  background: var(--gold); color: var(--black);
-  border: none; cursor: pointer; padding: 0 32px;
-  font-family: var(--sans); font-size: 9px;
-  letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
-  transition: background 0.3s;
-}
-.newsletter-btn:hover { background: var(--gold-light); }
-
-.newsletter-note {
-  font-size: 10px; color: var(--text-dim); margin-top: 16px;
-  letter-spacing: 0.05em;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--black); padding: 80px 80px 40px;
-  border-top: 0.5px solid rgba(201,168,76,0.1);
-}
-
-.footer-top {
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px; margin-bottom: 60px;
-}
-
-.footer-logo { margin-bottom: 20px; }
-.footer-tagline {
-  font-family: var(--serif); font-size: 15px; font-style: italic;
-  color: var(--text-mid); margin-bottom: 28px; font-weight: 300;
-  line-height: 1.6;
-}
-.footer-social { display: flex; gap: 12px; }
-.social-btn {
-  width: 36px; height: 36px; border: 0.5px solid rgba(201,168,76,0.15);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-dim); cursor: pointer; transition: border-color 0.3s, color 0.3s;
-  background: none;
-}
-.social-btn:hover { border-color: var(--gold); color: var(--gold); }
-.social-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-
-.footer-col-title {
-  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 24px; font-weight: 400;
-}
-.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.footer-links a {
-  text-decoration: none; font-size: 12px; color: var(--text-dim);
-  letter-spacing: 0.04em; transition: color 0.3s;
-}
-.footer-links a:hover { color: var(--gold-light); }
-
-.footer-bottom {
-  border-top: 0.5px solid rgba(201,168,76,0.08);
-  padding-top: 32px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.footer-copy {
-  font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em;
-}
-.footer-legal { display: flex; gap: 28px; }
-.footer-legal a {
-  font-size: 10px; color: var(--text-dim); text-decoration: none;
-  letter-spacing: 0.08em; transition: color 0.3s;
-}
-.footer-legal a:hover { color: var(--gold); }
-
-/* ── ANIMATIONS ── */
-.fade-in {
-  opacity: 0; transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.fade-in.visible { opacity: 1; transform: translateY(0); }
-.fade-in-delay-1 { transition-delay: 0.1s; }
-.fade-in-delay-2 { transition-delay: 0.2s; }
-.fade-in-delay-3 { transition-delay: 0.3s; }
-.fade-in-delay-4 { transition-delay: 0.4s; }
-
-/* ── UTILITY ── */
-.text-center { text-align: center; }
-.mb-0 { margin-bottom: 0; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURUM — Fine Jewelry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+
+      /*dsfsdfdsd*/
+      --black: #080807;
+      --black-2: #0f0f0d;
+      --black-3: #161612;
+      --black-4: #1e1e19;
+      --gold: #C9A84C;
+      --gold-light: #E8D5A3;
+      --gold-deep: #A07828;
+      --gold-muted: #7a5c2a;
+      --champagne: #F5EDD4;
+      --text-dim: #5a5140;
+      --text-mid: #8a7a55;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--champagne);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    ::selection {
+      background: var(--gold-deep);
+      color: var(--champagne);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--black-2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold-deep);
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.3s;
+      transform: translate(-50%, -50%);
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      border: 0.5px solid rgba(201, 168, 76, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.35s ease, width 0.3s, height 0.3s, opacity 0.3s;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 76px;
+      background: linear-gradient(to bottom, rgba(8, 8, 7, 0.96) 0%, transparent 100%);
+      border-bottom: 0.5px solid rgba(201, 168, 76, 0.08);
+      transition: background 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(8, 8, 7, 0.97);
+      border-bottom-color: rgba(201, 168, 76, 0.14);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .nav-logo-text {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 0.5px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-mid);
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-icon-btn:hover {
+      color: var(--gold);
+    }
+
+    .nav-icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 14px;
+      height: 14px;
+      background: var(--gold);
+      border-radius: 50%;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      overflow: hidden;
+      padding: 76px 0 0;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 70% 40%, rgba(201, 168, 76, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201, 168, 76, 0.02) 0%, transparent 60%);
+    }
+
+    .hero-left {
+      padding: 80px 60px 80px 80px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow span {
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    .eyebrow-line {
+      height: 0.5px;
+      width: 50px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(52px, 5vw, 80px);
+      font-weight: 300;
+      line-height: 1.06;
+      color: var(--champagne);
+      margin-bottom: 6px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--text-dim);
+      max-width: 340px;
+      margin: 28px 0 44px;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      border: 0.5px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 400;
+      padding: 16px 36px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.4s, color 0.4s, box-shadow 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+    }
+
+    .btn-gold:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-gold:hover {
+      color: var(--black);
+      box-shadow: 0 0 30px rgba(201, 168, 76, 0.18);
+    }
+
+    .btn-gold span,
+    .btn-gold svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-gold svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      transition: transform 0.3s;
+    }
+
+    .btn-gold:hover svg {
+      transform: translateX(4px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 52px;
+    }
+
+    .stat-item {}
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* ── HERO CAROUSEL ── */
+    .hero-right {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-images {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 80px 60px 80px 0;
+    }
+
+    .img-card {
+      position: absolute;
+      background: var(--black-3);
+      overflow: hidden;
+      border: 0.5px solid rgba(201, 168, 76, 0.1);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.6s;
+    }
+
+    .img-card:hover {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(201, 168, 76, 0.06);
+      z-index: 10;
+    }
+
+    .img-card-1 {
+      width: 240px;
+      height: 340px;
+      top: 80px;
+      left: -10px;
+      transform: rotate(-4deg);
+      z-index: 4;
+    }
+
+    .img-card-2 {
+      width: 200px;
+      height: 290px;
+      top: 140px;
+      left: 190px;
+      transform: rotate(2deg);
+      z-index: 5;
+    }
+
+    .img-card-3 {
+      width: 180px;
+      height: 260px;
+      top: 100px;
+      left: 360px;
+      transform: rotate(-2.5deg);
+      z-index: 3;
+    }
+
+    .img-card-4 {
+      width: 140px;
+      height: 200px;
+      top: 200px;
+      left: 510px;
+      transform: rotate(3deg);
+      z-index: 2;
+    }
+
+    .img-card-5 {
+      width: 120px;
+      height: 180px;
+      top: 260px;
+      left: 620px;
+      transform: rotate(-1.5deg);
+      z-index: 1;
+    }
+
+    .img-card:hover {
+      transform: rotate(0deg) scale(1.04) translateY(-8px);
+    }
+
+    .img-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Jewelry SVG illustrations */
+    .jewel-svg {
+      opacity: 0.7;
+    }
+
+    .img-gold-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.05) 0%, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    /* background patterns per card */
+    .img-card-1 .img-placeholder {
+      background: linear-gradient(160deg, #1a1508 0%, #0d0c07 100%);
+    }
+
+    .img-card-2 .img-placeholder {
+      background: linear-gradient(160deg, #141408 0%, #0a0a06 100%);
+    }
+
+    .img-card-3 .img-placeholder {
+      background: linear-gradient(160deg, #180f05 0%, #0d0b06 100%);
+    }
+
+    .img-card-4 .img-placeholder {
+      background: linear-gradient(160deg, #121210 0%, #0a0a09 100%);
+    }
+
+    .img-card-5 .img-placeholder {
+      background: linear-gradient(160deg, #151208 0%, #0b0906 100%);
+    }
+
+    .img-label {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-eyebrow span {
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    .diamond-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      color: var(--champagne);
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .divider {
+      width: 60px;
+      height: 0.5px;
+      background: var(--gold-deep);
+      margin: 28px auto 0;
+      opacity: 0.6;
+    }
+
+    /* ── FEATURED COLLECTIONS ── */
+    .collections {
+      padding: 120px 80px;
+      background: var(--black-2);
+    }
+
+    .collections-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 64px;
+    }
+
+    .col-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--black-3);
+      border: 0.5px solid rgba(201, 168, 76, 0.1);
+      cursor: pointer;
+      group: true;
+      transition: border-color 0.4s;
+    }
+
+    .col-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+    }
+
+    .col-img {
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black-4);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .col-card:hover .col-img {
+      transform: scale(1.04);
+    }
+
+    .col-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 8, 7, 0.8) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    .col-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.15;
+    }
+
+    .col-info {
+      padding: 24px 24px 28px;
+      position: relative;
+    }
+
+    .col-category {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .col-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--champagne);
+      margin-bottom: 4px;
+    }
+
+    .col-pieces {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .col-hover-btn {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border: 0.5px solid rgba(201, 168, 76, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .col-card:hover .col-hover-btn {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+
+    .col-hover-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    /* ── BEST SELLERS ── */
+    .bestsellers {
+      padding: 120px 80px;
+      background: var(--black);
+    }
+
+    .bestsellers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 64px;
+    }
+
+    .product-card {
+      background: var(--black-3);
+      overflow: hidden;
+      border: 0.5px solid rgba(201, 168, 76, 0.08);
+      transition: border-color 0.4s, box-shadow 0.4s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.04);
+    }
+
+    .product-img {
+      height: 320px;
+      background: var(--black-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+    }
+
+    .product-img svg {
+      opacity: 0.2;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      font-weight: 500;
+    }
+
+    .product-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .product-sub {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .product-name {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--champagne);
+    }
+
+    .product-price {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--gold-light);
+      font-weight: 300;
+      margin-top: 4px;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px 24px;
+    }
+
+    .view-btn {
+      background: none;
+      border: 0.5px solid rgba(201, 168, 76, 0.25);
+      color: var(--text-mid);
+      font-family: var(--sans);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+    }
+
+    .view-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    .wish-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dim);
+      transition: color 0.3s;
+    }
+
+    .wish-btn:hover {
+      color: var(--gold);
+    }
+
+    .wish-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    /* ── LUXURY BANNER ── */
+    .banner {
+      padding: 120px 80px;
+      background: var(--black-2);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .banner-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 50%, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+    }
+
+    .banner-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .ornament-line {
+      height: 0.5px;
+      width: 80px;
+      background: linear-gradient(90deg, transparent, var(--gold-deep));
+    }
+
+    .ornament-line.r {
+      background: linear-gradient(90deg, var(--gold-deep), transparent);
+    }
+
+    .banner-headline {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--champagne);
+      max-width: 800px;
+      margin: 0 auto 24px;
+    }
+
+    .banner-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .banner-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      margin-bottom: 48px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── BRAND STORY ── */
+    .story {
+      padding: 120px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+      background: var(--black);
+    }
+
+    .story-left {}
+
+    .story-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .story-headline {
+      font-family: var(--serif);
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 300;
+      color: var(--champagne);
+      line-height: 1.12;
+      margin-bottom: 32px;
+    }
+
+    .story-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .story-body {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .story-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border: 0.5px solid rgba(201, 168, 76, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+    }
+
+    .feature-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .feature-text-title {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--champagne);
+      margin-bottom: 5px;
+    }
+
+    .feature-text-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    .story-right {
+      position: relative;
+      height: 600px;
+    }
+
+    .story-img-main {
+      position: absolute;
+      inset: 0;
+      background: var(--black-3);
+      border: 0.5px solid rgba(201, 168, 76, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .story-img-accent {
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 180px;
+      height: 220px;
+      background: var(--black-4);
+      border: 0.5px solid rgba(201, 168, 76, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .story-gold-line {
+      position: absolute;
+      left: -20px;
+      top: 60px;
+      width: 0.5px;
+      height: 140px;
+      background: var(--gold-deep);
+      opacity: 0.5;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      padding: 120px 80px;
+      background: var(--black-2);
+    }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+
+    .test-card {
+      background: var(--black-3);
+      border: 0.5px solid rgba(201, 168, 76, 0.08);
+      padding: 40px 36px;
+      position: relative;
+      transition: border-color 0.4s;
+    }
+
+    .test-card:hover {
+      border-color: rgba(201, 168, 76, 0.25);
+    }
+
+    .test-quote-mark {
+      font-family: var(--serif);
+      font-size: 80px;
+      color: var(--gold);
+      opacity: 0.15;
+      line-height: 1;
+      position: absolute;
+      top: 20px;
+      left: 32px;
+      font-weight: 300;
+    }
+
+    .test-text {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--champagne);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      padding-top: 20px;
+      font-weight: 300;
+    }
+
+    .test-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .test-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--black-4);
+      border: 0.5px solid rgba(201, 168, 76, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 16px;
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .test-name {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--champagne);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .test-location {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .test-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    /* ── INSTAGRAM GALLERY ── */
+    .gallery {
+      padding: 100px 80px;
+      background: var(--black);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: 200px 200px;
+      gap: 8px;
+      margin-top: 56px;
+    }
+
+    .gallery-item {
+      background: var(--black-3);
+      overflow: hidden;
+      border: 0.5px solid rgba(201, 168, 76, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.4s;
+    }
+
+    .gallery-item.tall {
+      grid-row: 1 / 3;
+    }
+
+    .gallery-item:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+    }
+
+    .gallery-hover {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 8, 7, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-hover {
+      opacity: 1;
+    }
+
+    .gallery-hover svg {
+      width: 24px;
+      height: 24px;
+      color: var(--gold);
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .gallery-inner {
+      width: 100%;
+      height: 100%;
+      background: var(--black-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-inner svg {
+      opacity: 0.12;
+    }
+
+    /* ── NEWSLETTER ── */
+    .newsletter {
+      padding: 100px 80px;
+      background: var(--black-2);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 70%);
+    }
+
+    .newsletter-headline {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      color: var(--champagne);
+      margin-bottom: 16px;
+    }
+
+    .newsletter-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .newsletter-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      max-width: 400px;
+      margin: 0 auto 48px;
+      line-height: 1.8;
+      letter-spacing: 0.03em;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 480px;
+      margin: 0 auto;
+      border: 0.5px solid rgba(201, 168, 76, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: var(--champagne);
+      padding: 18px 24px;
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .newsletter-btn {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      cursor: pointer;
+      padding: 0 32px;
+      font-family: var(--sans);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .newsletter-btn:hover {
+      background: var(--gold-light);
+    }
+
+    .newsletter-note {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 80px 80px 40px;
+      border-top: 0.5px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+
+    .footer-tagline {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-mid);
+      margin-bottom: 28px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border: 0.5px solid rgba(201, 168, 76, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s;
+      background: none;
+    }
+
+    .social-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .social-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .footer-col-title {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .footer-bottom {
+      border-top: 0.5px solid rgba(201, 168, 76, 0.08);
+      padding-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal a {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+
+    .footer-legal a:hover {
+      color: var(--gold);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 {
+      transition-delay: 0.1s;
+    }
+
+    .fade-in-delay-2 {
+      transition-delay: 0.2s;
+    }
+
+    .fade-in-delay-3 {
+      transition-delay: 0.3s;
+    }
+
+    .fade-in-delay-4 {
+      transition-delay: 0.4s;
+    }
+
+    /* ── UTILITY ── */
+    .text-center {
+      text-align: center;
+    }
+
+    .mb-0 {
+      margin-bottom: 0;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">
-    <svg class="nav-logo-icon" viewBox="0 0 30 30" fill="none">
-      <path d="M15 1.5L19.5 11H27L21 16.5L23.5 26L15 21.5L6.5 26L9 16.5L3 11H10.5Z" fill="#C9A84C" opacity="0.85"/>
-      <path d="M15 5.5L18 12H22.5L18.5 15.5L20 21.5L15 18.5L10 21.5L11.5 15.5L7.5 12H12Z" fill="#080807"/>
-      <circle cx="15" cy="15" r="3.5" fill="#C9A84C" opacity="0.5"/>
-    </svg>
-    <span class="nav-logo-text">AURUM</span>
-  </a>
-
-  <ul class="nav-links">
-    <li><a href="#">Home</a></li>
-    <li><a href="#collections">Collections</a></li>
-    <li><a href="#">Rings</a></li>
-    <li><a href="#">Necklaces</a></li>
-    <li><a href="#">Bracelets</a></li>
-    <li><a href="#">Earrings</a></li>
-    <li><a href="#">Watches</a></li>
-    <li><a href="#story">About</a></li>
-  </ul>
-
-  <div class="nav-icons">
-    <button class="nav-icon-btn" aria-label="Search">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-    </button>
-    <button class="nav-icon-btn" aria-label="Account">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </button>
-    <button class="nav-icon-btn" aria-label="Cart" style="position:relative">
-      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      <span class="cart-badge">2</span>
-    </button>
-  </div>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero" id="hero">
-  <div class="hero-bg"></div>
-
-  <div class="hero-left">
-    <div class="hero-eyebrow fade-in">
-      <div class="eyebrow-line"></div>
-      <span>New Collection 2026</span>
-    </div>
-
-    <h1 class="hero-headline fade-in fade-in-delay-1">
-      Style That<br>Speaks
-      <em>Without Words</em>
-    </h1>
-
-    <p class="hero-sub fade-in fade-in-delay-2">
-      Discover beautifully crafted gold pieces designed to illuminate your elegance. From delicate essentials to bold statement jewelry — find your perfect shine.
-    </p>
-
-    <a href="#collections" class="btn-gold fade-in fade-in-delay-3">
-      <span>Explore Collection</span>
-      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  <!-- ═══ NAVBAR ═══ -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 30 30" fill="none">
+        <path d="M15 1.5L19.5 11H27L21 16.5L23.5 26L15 21.5L6.5 26L9 16.5L3 11H10.5Z" fill="#C9A84C" opacity="0.85" />
+        <path d="M15 5.5L18 12H22.5L18.5 15.5L20 21.5L15 18.5L10 21.5L11.5 15.5L7.5 12H12Z" fill="#080807" />
+        <circle cx="15" cy="15" r="3.5" fill="#C9A84C" opacity="0.5" />
+      </svg>
+      <span class="nav-logo-text">AURUM</span>
     </a>
 
-    <div class="hero-stats fade-in fade-in-delay-4">
-      <div class="stat-item">
-        <span class="stat-num">18K</span>
-        <span class="stat-label">Pure Gold</span>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#">Rings</a></li>
+      <li><a href="#">Necklaces</a></li>
+      <li><a href="#">Bracelets</a></li>
+      <li><a href="#">Earrings</a></li>
+      <li><a href="#">Watches</a></li>
+      <li><a href="#story">About</a></li>
+    </ul>
+
+    <div class="nav-icons">
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart" style="position:relative">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="cart-badge">2</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+
+    <div class="hero-left">
+      <div class="hero-eyebrow fade-in">
+        <div class="eyebrow-line"></div>
+        <span>New Collection 2026</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-num">400+</span>
-        <span class="stat-label">Designs</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">12</span>
-        <span class="stat-label">Years Craft</span>
+
+      <h1 class="hero-headline fade-in fade-in-delay-1">
+        Style That<br>Speaks
+        <em>Without Words</em>
+      </h1>
+
+      <p class="hero-sub fade-in fade-in-delay-2">
+        Discover beautifully crafted gold pieces designed to illuminate your elegance. From delicate essentials to bold
+        statement jewelry — find your perfect shine.
+      </p>
+
+      <a href="#collections" class="btn-gold fade-in fade-in-delay-3">
+        <span>Explore Collection</span>
+        <svg viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </a>
+
+      <div class="hero-stats fade-in fade-in-delay-4">
+        <div class="stat-item">
+          <span class="stat-num">18K</span>
+          <span class="stat-label">Pure Gold</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">400+</span>
+          <span class="stat-label">Designs</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">12</span>
+          <span class="stat-label">Years Craft</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="hero-right">
-    <div class="hero-images">
+    <div class="hero-right">
+      <div class="hero-images">
 
-      <div class="img-card img-card-1">
-        <div class="img-inner">
-          <div class="img-placeholder">
-            <!-- Necklace SVG -->
-            <img src="img/modelo_1.png" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
-            <div class="img-gold-overlay"></div>
+        <div class="img-card img-card-1">
+          <div class="img-inner">
+            <div class="img-placeholder">
+              <!-- Necklace SVG -->
+              <img src="img/modelo_1.png" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
+              <div class="img-gold-overlay"></div>
+            </div>
           </div>
+          <span class="img-label">Gold Necklace</span>
         </div>
-        <span class="img-label">Gold Necklace</span>
-      </div>
 
-      <div class="img-card img-card-2">
-        <div class="img-inner">
-          <div class="img-placeholder">
-            <!-- Ring SVG -->
-            <img src="img/modelo_3.png" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
-            <div class="img-gold-overlay"></div>
+        <div class="img-card img-card-2">
+          <div class="img-inner">
+            <div class="img-placeholder">
+              <!-- Ring SVG -->
+              <img src="img/modelo_3.png" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
+              <div class="img-gold-overlay"></div>
+            </div>
           </div>
+          <span class="img-label"></span>
         </div>
-        <span class="img-label"></span>
-      </div>
 
-      <div class="img-card img-card-3">
-        <div class="img-inner">
-          <div class="img-placeholder">
-            <!-- Earrings SVG -->
-            <img src="img/modelo_black.jpg" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
-            <div class="img-gold-overlay"></div>
+        <div class="img-card img-card-3">
+          <div class="img-inner">
+            <div class="img-placeholder">
+              <!-- Earrings SVG -->
+              <img src="img/modelo_black.jpg" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
+              <div class="img-gold-overlay"></div>
+            </div>
           </div>
+          <span class="img-label"></span>
         </div>
-        <span class="img-label"></span>
-      </div>
 
-      <div class="img-card img-card-4">
-        <div class="img-inner">
-          <div class="img-placeholder">
-            <img src="img/manos_ring.jpg" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
-            <div class="img-gold-overlay"></div>
+        <div class="img-card img-card-4">
+          <div class="img-inner">
+            <div class="img-placeholder">
+              <img src="img/manos_ring.jpg" alt="Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
+              <div class="img-gold-overlay"></div>
+            </div>
           </div>
+          <span class="img-label"></span>
         </div>
-        <span class="img-label"></span>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══ FEATURED COLLECTIONS ═══ -->
-<section class="collections" id="collections">
-  <div class="section-eyebrow fade-in">
-    <div class="diamond-dot"></div>
-    <span>Curated For You</span>
-    <div class="diamond-dot"></div>
-  </div>
-  <h2 class="section-title fade-in fade-in-delay-1">Signature <em>Collections</em></h2>
-  <div class="divider fade-in fade-in-delay-2"></div>
+  <!-- ═══ FEATURED COLLECTIONS ═══ -->
+  <section class="collections" id="collections">
+    <div class="section-eyebrow fade-in">
+      <div class="diamond-dot"></div>
+      <span>Curated For You</span>
+      <div class="diamond-dot"></div>
+    </div>
+    <h2 class="section-title fade-in fade-in-delay-1">Signature <em>Collections</em></h2>
+    <div class="divider fade-in fade-in-delay-2"></div>
 
-  <div class="collections-grid">
+    <div class="collections-grid">
 
-    <!-- Rings -->
-    <div class="col-card fade-in">
-      <div class="col-img">
+      <!-- Rings -->
+      <div class="col-card fade-in">
+        <div class="col-img">
 
           <img src="img/ring_dark.jpg" alt="Colección de Aretes" style="width: 100%; height: 100%; object-fit: cover;">
           <div class="col-img-overlay"></div>
 
+        </div>
+        <div class="col-info">
+          <p class="col-category">Collection</p>
+          <h3 class="col-name">Rings</h3>
+          <p class="col-pieces">48 unique pieces</p>
+          <button class="col-hover-btn" aria-label="View rings">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="col-info">
-        <p class="col-category">Collection</p>
-        <h3 class="col-name">Rings</h3>
-        <p class="col-pieces">48 unique pieces</p>
-        <button class="col-hover-btn" aria-label="View rings">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
 
-    <!-- Necklaces -->
-    <div class="col-card fade-in fade-in-delay-1">
-      <div class="col-img">
+      <!-- Necklaces -->
+      <div class="col-card fade-in fade-in-delay-1">
+        <div class="col-img">
 
           <img src="img/collarcito.jpg" alt="Colección de Aretes" style="width: 100%; height: 100%; object-fit: cover;">
           <div class="col-img-overlay"></div>
 
+        </div>
+        <div class="col-info">
+          <p class="col-category">Collection</p>
+          <h3 class="col-name">Necklaces</h3>
+          <p class="col-pieces">62 unique pieces</p>
+          <button class="col-hover-btn" aria-label="View necklaces">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="col-info">
-        <p class="col-category">Collection</p>
-        <h3 class="col-name">Necklaces</h3>
-        <p class="col-pieces">62 unique pieces</p>
-        <button class="col-hover-btn" aria-label="View necklaces">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
 
-    <!-- Bracelets -->
-    <div class="col-card fade-in fade-in-delay-2">
-      <div class="col-img">
+      <!-- Bracelets -->
+      <div class="col-card fade-in fade-in-delay-2">
+        <div class="col-img">
 
           <img src="img/manillass.jpg" alt="Colección de Aretes" style="width: 100%; height: 100%; object-fit: cover;">
-        
+
           <div class="col-img-overlay"></div>
 
+        </div>
+        <div class="col-info">
+          <p class="col-category">Collection</p>
+          <h3 class="col-name">Bracelets</h3>
+          <p class="col-pieces">35 unique pieces</p>
+          <button class="col-hover-btn" aria-label="View bracelets">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="col-info">
-        <p class="col-category">Collection</p>
-        <h3 class="col-name">Bracelets</h3>
-        <p class="col-pieces">35 unique pieces</p>
-        <button class="col-hover-btn" aria-label="View bracelets">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
+
+      <!-- Earrings -->
+      <div class="col-card fade-in fade-in-delay-3">
+        <div class="col-img">
+
+          <img src="img/earrings.jpg" alt="Colección de Aretes" style="width: 100%; height: 100%; object-fit: cover;">
+
+          <div class="col-img-overlay"></div>
+
+        </div>
+        <div class="col-info">
+          <p class="col-category">Collection</p>
+          <h3 class="col-name">Earrings</h3>
+          <p class="col-pieces">54 unique pieces</p>
+          <button class="col-hover-btn" aria-label="View earrings">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Earrings -->
-    <div class="col-card fade-in fade-in-delay-3">
-      <div class="col-img">
-        
-        <img src="img/earrings.jpg" alt="Colección de Aretes" style="width: 100%; height: 100%; object-fit: cover;">
-        
-        <div class="col-img-overlay"></div>
-        
-      </div>
-      <div class="col-info">
-        <p class="col-category">Collection</p>
-        <h3 class="col-name">Earrings</h3>
-        <p class="col-pieces">54 unique pieces</p>
-        <button class="col-hover-btn" aria-label="View earrings">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
+  <!-- ═══ BEST SELLERS ═══ -->
+  <section class="bestsellers">
+    <div class="section-eyebrow fade-in">
+      <div class="diamond-dot"></div>
+      <span>Most Loved</span>
+      <div class="diamond-dot"></div>
     </div>
-  </div>
-</section>
+    <h2 class="section-title fade-in fade-in-delay-1">Best <em>Sellers</em></h2>
+    <div class="divider fade-in fade-in-delay-2"></div>
 
-<!-- ═══ BEST SELLERS ═══ -->
-<section class="bestsellers">
-  <div class="section-eyebrow fade-in">
-    <div class="diamond-dot"></div>
-    <span>Most Loved</span>
-    <div class="diamond-dot"></div>
-  </div>
-  <h2 class="section-title fade-in fade-in-delay-1">Best <em>Sellers</em></h2>
-  <div class="divider fade-in fade-in-delay-2"></div>
+    <div class="bestsellers-grid">
 
-  <div class="bestsellers-grid">
+      <!-- Product 1 -->
+      <div class="product-card fade-in">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/diamong_pagee.png" alt="Soleil Diamond Ring" width="100%" height="100%"
+            style="object-fit: cover;">
+          <span class="product-badge">Best Seller</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Diamonds</span>
+          <h3 class="product-name">Soleil Diamond Ring</h3>
+          <span class="product-price">$2,450</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-    <!-- Product 1 -->
-    <div class="product-card fade-in">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/diamong_pagee.png" alt="Soleil Diamond Ring" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">Best Seller</span>
+      <!-- Product 2 -->
+      <div class="product-card fade-in fade-in-delay-1">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/luna_black.png" alt="Luna Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
+          <span class="product-badge">New</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Gold</span>
+          <h3 class="product-name">Luna Gold Necklace</h3>
+          <span class="product-price">$1,890</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="product-info">
-        <span class="product-sub">Diamonds</span>
-        <h3 class="product-name">Soleil Diamond Ring</h3>
-        <span class="product-price">$2,450</span>
+
+      <!-- Product 3 -->
+      <div class="product-card fade-in fade-in-delay-2">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/reloj.png" alt="Eternal Watch Gold" width="100%" height="100%" style="object-fit: cover;">
+          <span class="product-badge">New</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Luxury</span>
+          <h3 class="product-name">Eternal Watch Gold</h3>
+          <span class="product-price">$5,200</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
+
+      <!-- Product 4 -->
+      <div class="product-card fade-in fade-in-delay-3">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/pendientes_gold.png" alt="Cascade Earrings" width="100%" height="100%"
+            style="object-fit: cover;">
+          <span class="product-badge">Limited</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Diamonds</span>
+          <h3 class="product-name">Cascade Earrings</h3>
+          <span class="product-price">$3,100</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      <!-- Product 5 -->
+      <div class="product-card fade-in fade-in-delay-1">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/Aurelia.png" alt="Aurelia Bracelet" width="100%" height="100%" style="object-fit: cover;">
+          <span class="product-badge">Limited</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Gold</span>
+          <h3 class="product-name">Aurelia Bracelet</h3>
+          <span class="product-price">$1,350</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card fade-in fade-in-delay-2">
+        <div class="product-img">
+          <div class="product-img-overlay"></div>
+          <img src="img/set.png" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
+          <span class="product-badge">Popular</span>
+        </div>
+        <div class="product-info">
+          <span class="product-sub">Platinum</span>
+          <h3 class="product-name">Empress Ring Set</h3>
+          <span class="product-price">$4,800</span>
+        </div>
+        <div class="product-footer">
+          <button class="view-btn">View Product</button>
+          <button class="wish-btn" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <!-- Product 2 -->
-    <div class="product-card fade-in fade-in-delay-1">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/luna_black.png" alt="Luna Gold Necklace" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">New</span>
-      </div>
-      <div class="product-info">
-        <span class="product-sub">Gold</span>
-        <h3 class="product-name">Luna Gold Necklace</h3>
-        <span class="product-price">$1,890</span>
-      </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-      </div>
+  <!-- ═══ LUXURY BANNER ═══ -->
+  <section class="banner">
+    <div class="banner-bg"></div>
+    <div class="banner-ornament fade-in">
+      <div class="ornament-line"></div>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <rect x="4" y="4" width="12" height="12" transform="rotate(45 10 10)" stroke="#C9A84C" stroke-width="0.8"
+          fill="rgba(201,168,76,0.1)" />
+      </svg>
+      <div class="ornament-line r"></div>
     </div>
-
-    <!-- Product 3 -->
-    <div class="product-card fade-in fade-in-delay-2">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/reloj.png" alt="Eternal Watch Gold" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">New</span>
-      </div>
-      <div class="product-info">
-        <span class="product-sub">Luxury</span>
-        <h3 class="product-name">Eternal Watch Gold</h3>
-        <span class="product-price">$5,200</span>
-      </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Product 4 -->
-    <div class="product-card fade-in fade-in-delay-3">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/pendientes_gold.png" alt="Cascade Earrings" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">Limited</span>
-      </div>
-      <div class="product-info">
-        <span class="product-sub">Diamonds</span>
-        <h3 class="product-name">Cascade Earrings</h3>
-        <span class="product-price">$3,100</span>
-      </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Product 5 -->
-    <div class="product-card fade-in fade-in-delay-1">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/Aurelia.png" alt="Aurelia Bracelet" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">Limited</span>
-      </div>
-      <div class="product-info">
-        <span class="product-sub">Gold</span>
-        <h3 class="product-name">Aurelia Bracelet</h3>
-        <span class="product-price">$1,350</span>
-      </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Product 6 -->
-    <div class="product-card fade-in fade-in-delay-2">
-      <div class="product-img">
-        <div class="product-img-overlay"></div>
-        <img src="img/set.png" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
-        <span class="product-badge">Popular</span>
-      </div>
-      <div class="product-info">
-        <span class="product-sub">Platinum</span>
-        <h3 class="product-name">Empress Ring Set</h3>
-        <span class="product-price">$4,800</span>
-      </div>
-      <div class="product-footer">
-        <button class="view-btn">View Product</button>
-        <button class="wish-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══ LUXURY BANNER ═══ -->
-<section class="banner">
-  <div class="banner-bg"></div>
-  <div class="banner-ornament fade-in">
-    <div class="ornament-line"></div>
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <rect x="4" y="4" width="12" height="12" transform="rotate(45 10 10)" stroke="#C9A84C" stroke-width="0.8" fill="rgba(201,168,76,0.1)"/>
-    </svg>
-    <div class="ornament-line r"></div>
-  </div>
-  <h2 class="banner-headline fade-in fade-in-delay-1">
-    Jewelry Crafted for<br><em>Timeless Elegance</em>
-  </h2>
-  <p class="banner-sub fade-in fade-in-delay-2">
-    Each piece is a testament to over a century of Colombian goldsmithing tradition — where artistry meets eternal beauty.
-  </p>
-  <a href="#" class="btn-gold fade-in fade-in-delay-3" style="display:inline-flex">
-    <span>Discover Our Craft</span>
-    <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-  </a>
-</section>
-
-<!-- ═══ BRAND STORY ═══ -->
-<section class="story" id="story">
-  <div class="story-left">
-    <p class="story-eyebrow fade-in">Our Heritage</p>
-    <h2 class="story-headline fade-in fade-in-delay-1">
-      Born from<br><em>Passion</em>,<br>Refined by Time
+    <h2 class="banner-headline fade-in fade-in-delay-1">
+      Jewelry Crafted for<br><em>Timeless Elegance</em>
     </h2>
-    <p class="story-body fade-in fade-in-delay-2">
-      AURUM was founded with a singular vision: to create jewelry that transcends generations. Each piece is an heirloom waiting to be discovered — handcrafted by master artisans in the tradition of Colombia's legendary goldsmithing heritage.
+    <p class="banner-sub fade-in fade-in-delay-2">
+      Each piece is a testament to over a century of Colombian goldsmithing tradition — where artistry meets eternal
+      beauty.
     </p>
-    <p class="story-body fade-in fade-in-delay-2">
-      We source only the finest 18-karat gold and ethically mined gemstones, marrying century-old techniques with contemporary design to create pieces that are as extraordinary as the women who wear them.
-    </p>
+    <a href="#" class="btn-gold fade-in fade-in-delay-3" style="display:inline-flex">
+      <span>Discover Our Craft</span>
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  </section>
 
-    <div class="story-feature fade-in fade-in-delay-3">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-      </div>
-      <div>
-        <p class="feature-text-title">Certified Authenticity</p>
-        <p class="feature-text-desc">Every piece includes a certificate of authenticity and hallmark certification.</p>
-      </div>
-    </div>
-    <div class="story-feature fade-in fade-in-delay-4" style="margin-top:20px">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
-      <div>
-        <p class="feature-text-title">Ethical Sourcing</p>
-        <p class="feature-text-desc">Responsibly sourced materials — always. For jewelry you can wear with pride.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="story-right fade-in fade-in-delay-2">
-    <div class="story-gold-line"></div>
-    <div class="story-img-main">
-      <img src="img/anillos.png" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
-      <div style="position:absolute;bottom:24px;left:24px;">
-        <p style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Master Craft</p>
-        <p style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--champagne)">Since 2013</p>
-      </div>
-    </div>
-    <div class="story-img-accent">
-      <img src="img/negra.jpg" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
-    </div>
-  </div>
-</section>
-
-<!-- ═══ TESTIMONIALS ═══ -->
-<section class="testimonials">
-  <div class="section-eyebrow fade-in">
-    <div class="diamond-dot"></div>
-    <span>Client Stories</span>
-    <div class="diamond-dot"></div>
-  </div>
-  <h2 class="section-title fade-in fade-in-delay-1">What They <em>Say</em></h2>
-  <div class="divider fade-in fade-in-delay-2"></div>
-
-  <div class="test-grid">
-
-    <div class="test-card fade-in">
-      <div class="test-quote-mark">"</div>
-      <div class="test-stars">
-        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-      </div>
-      <p class="test-text">The Luna Necklace is absolutely breathtaking. The craftsmanship is beyond anything I've ever owned. It feels like wearing a piece of art.</p>
-      <div class="test-author">
-        <div class="test-avatar">M</div>
-        <div>
-          <span class="test-name">Matías Morales</span>
-          <span class="test-location">Sabanagrande, Atlántico</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="test-card fade-in fade-in-delay-1">
-      <div class="test-quote-mark">"</div>
-      <div class="test-stars">
-        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-      </div>
-      <p class="test-text">I purchased the Soleil ring for my engagement and she cried. AURUM gave us something truly eternal. The quality is unmatched at this price point.</p>
-      <div class="test-author">
-        <div class="test-avatar">V</div>
-        <div>
-          <span class="test-name">Valeria Olivo</span>
-          <span class="test-location">Pivijay, Magdalena</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="test-card fade-in fade-in-delay-2">
-      <div class="test-quote-mark">"</div>
-      <div class="test-stars">
-        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-      </div>
-      <p class="test-text">Each piece tells a story. The Aurelia bracelet I received has become my everyday luxury — elegant enough for galas, timeless enough for mornings.</p>
-      <div class="test-author">
-        <div class="test-avatar">I</div>
-        <div>
-          <span class="test-name">Isabella Escobar</span>
-          <span class="test-location">Santo Tomás, Atlántico</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══ INSTAGRAM GALLERY ═══ -->
-<section class="gallery">
-  <div class="section-eyebrow fade-in">
-    <div class="diamond-dot"></div>
-    <span>@aurum.jewelry</span>
-    <div class="diamond-dot"></div>
-  </div>
-  <h2 class="section-title fade-in fade-in-delay-1">Our <em>World</em></h2>
-  <div class="divider fade-in fade-in-delay-2"></div>
-
-  <div class="gallery-grid">
-
-    <div class="gallery-item tall fade-in">
-      <div class="gallery-inner">
-        <svg width="80" height="120" viewBox="0 0 80 120" fill="none" opacity="0.2">
-          <path d="M40 8 C18 8 4 36 4 56 C4 90 20 110 40 114 C60 110 76 90 76 56 C76 36 62 8 40 8Z" stroke="#C9A84C" stroke-width="2"/>
-          <circle cx="40" cy="114" r="8" fill="#C9A84C"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="gallery-item fade-in fade-in-delay-1">
-      <div class="gallery-inner">
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.2">
-          <circle cx="30" cy="30" r="22" stroke="#C9A84C" stroke-width="1.5"/>
-          <polygon points="30,14 34,25 46,25 37,33 40,45 30,37 20,45 23,33 14,25 26,25" fill="#C9A84C"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="gallery-item fade-in fade-in-delay-2">
-      <div class="gallery-inner">
-        <svg width="60" height="50" viewBox="0 0 60 50" fill="none" opacity="0.2">
-          <path d="M5 25 Q30 5 55 25 Q30 45 5 25Z" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
-          <circle cx="30" cy="14" r="5" fill="#C9A84C"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="gallery-item fade-in fade-in-delay-3">
-      <div class="gallery-inner">
-        <svg width="55" height="55" viewBox="0 0 55 55" fill="none" opacity="0.2">
-          <circle cx="27.5" cy="27.5" r="20" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
-          <circle cx="27.5" cy="27.5" r="8" fill="#C9A84C" opacity="0.6"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="gallery-item fade-in fade-in-delay-4">
-      <div class="gallery-inner">
-        <svg width="60" height="80" viewBox="0 0 60 80" fill="none" opacity="0.2">
-          <circle cx="15" cy="12" r="7" stroke="#C9A84C" stroke-width="1.2" fill="none"/>
-          <line x1="15" y1="19" x2="15" y2="36" stroke="#C9A84C" stroke-width="1"/>
-          <path d="M7 36 L23 36 L19 62 L15 67 L11 62 Z" stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.1)"/>
-          <circle cx="45" cy="12" r="7" stroke="#C9A84C" stroke-width="1.2" fill="none"/>
-          <line x1="45" y1="19" x2="45" y2="36" stroke="#C9A84C" stroke-width="1"/>
-          <path d="M37 36 L53 36 L49 62 L45 67 L41 62 Z" stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.1)"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="gallery-item fade-in fade-in-delay-1" style="grid-column: 2 / 4;">
-      <div class="gallery-inner" style="background: var(--black-3)">
-        <svg width="100" height="60" viewBox="0 0 100 60" fill="none" opacity="0.2">
-          <path d="M50 5L58 22H77L63 33L68 51L50 40L32 51L37 33L23 22H42Z" fill="#C9A84C"/>
-        </svg>
-      </div>
-      <div class="gallery-hover">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══ NEWSLETTER ═══ -->
-<section class="newsletter">
-  <div class="newsletter-bg"></div>
-
-  <div class="banner-ornament fade-in">
-    <div class="ornament-line"></div>
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" transform="rotate(45 8 8)" stroke="#C9A84C" stroke-width="0.8"/></svg>
-    <div class="ornament-line r"></div>
-  </div>
-
-  <h2 class="newsletter-headline fade-in fade-in-delay-1">
-    Join the <em>Aurum</em> Experience
-  </h2>
-  <p class="newsletter-sub fade-in fade-in-delay-2">
-    Be the first to discover new collections, exclusive offers, and the stories behind each piece.
-  </p>
-
-  <div class="newsletter-form fade-in fade-in-delay-3">
-    <input class="newsletter-input" type="email" placeholder="Your email address"/>
-    <button class="newsletter-btn">Subscribe</button>
-  </div>
-  <p class="newsletter-note fade-in fade-in-delay-4">No spam, ever. Unsubscribe at any time.</p>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-logo">
-        <a href="#" class="nav-logo" style="display:inline-flex">
-          <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
-            <path d="M15 1.5L19.5 11H27L21 16.5L23.5 26L15 21.5L6.5 26L9 16.5L3 11H10.5Z" fill="#C9A84C" opacity="0.85"/>
-            <path d="M15 5.5L18 12H22.5L18.5 15.5L20 21.5L15 18.5L10 21.5L11.5 15.5L7.5 12H12Z" fill="#080807"/>
-            <circle cx="15" cy="15" r="3.5" fill="#C9A84C" opacity="0.5"/>
-          </svg>
-          <span class="nav-logo-text">AURUM</span>
-        </a>
-      </div>
-      <p class="footer-tagline">
-        "Crafted for those who<br>understand beauty is eternal."
+  <!-- ═══ BRAND STORY ═══ -->
+  <section class="story" id="story">
+    <div class="story-left">
+      <p class="story-eyebrow fade-in">Our Heritage</p>
+      <h2 class="story-headline fade-in fade-in-delay-1">
+        Born from<br><em>Passion</em>,<br>Refined by Time
+      </h2>
+      <p class="story-body fade-in fade-in-delay-2">
+        AURUM was founded with a singular vision: to create jewelry that transcends generations. Each piece is an
+        heirloom waiting to be discovered — handcrafted by master artisans in the tradition of Colombia's legendary
+        goldsmithing heritage.
       </p>
-      <div class="footer-social">
-        <button class="social-btn" aria-label="Instagram">
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </button>
-        <button class="social-btn" aria-label="Pinterest">
-          <svg viewBox="0 0 24 24"><path d="M8 20l4-9m0 0c0 2 1 3 3 3s4-2 4-5a7 7 0 10-13.5 2.5"/></svg>
-        </button>
-        <button class="social-btn" aria-label="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-        </button>
-        <button class="social-btn" aria-label="TikTok">
-          <svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
-        </button>
+      <p class="story-body fade-in fade-in-delay-2">
+        We source only the finest 18-karat gold and ethically mined gemstones, marrying century-old techniques with
+        contemporary design to create pieces that are as extraordinary as the women who wear them.
+      </p>
+
+      <div class="story-feature fade-in fade-in-delay-3">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </svg>
+        </div>
+        <div>
+          <p class="feature-text-title">Certified Authenticity</p>
+          <p class="feature-text-desc">Every piece includes a certificate of authenticity and hallmark certification.
+          </p>
+        </div>
+      </div>
+      <div class="story-feature fade-in fade-in-delay-4" style="margin-top:20px">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </div>
+        <div>
+          <p class="feature-text-title">Ethical Sourcing</p>
+          <p class="feature-text-desc">Responsibly sourced materials — always. For jewelry you can wear with pride.</p>
+        </div>
       </div>
     </div>
 
-    <div>
-      <h4 class="footer-col-title">Collections</h4>
-      <ul class="footer-links">
-        <li><a href="#">Rings</a></li>
-        <li><a href="#">Necklaces</a></li>
-        <li><a href="#">Bracelets</a></li>
-        <li><a href="#">Earrings</a></li>
-        <li><a href="#">Watches</a></li>
-        <li><a href="#">New Arrivals</a></li>
-      </ul>
+    <div class="story-right fade-in fade-in-delay-2">
+      <div class="story-gold-line"></div>
+      <div class="story-img-main">
+        <img src="img/anillos.png" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
+        <div style="position:absolute;bottom:24px;left:24px;">
+          <p style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">
+            Master Craft</p>
+          <p style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--champagne)">Since 2013</p>
+        </div>
+      </div>
+      <div class="story-img-accent">
+        <img src="img/negra.jpg" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIALS ═══ -->
+  <section class="testimonials">
+    <div class="section-eyebrow fade-in">
+      <div class="diamond-dot"></div>
+      <span>Client Stories</span>
+      <div class="diamond-dot"></div>
+    </div>
+    <h2 class="section-title fade-in fade-in-delay-1">What They <em>Say</em></h2>
+    <div class="divider fade-in fade-in-delay-2"></div>
+
+    <div class="test-grid">
+
+      <div class="test-card fade-in">
+        <div class="test-quote-mark">"</div>
+        <div class="test-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="test-text">The Luna Necklace is absolutely breathtaking. The craftsmanship is beyond anything I've
+          ever owned. It feels like wearing a piece of art.</p>
+        <div class="test-author">
+          <div class="test-avatar">M</div>
+          <div>
+            <span class="test-name">Matías Morales</span>
+            <span class="test-location">Sabanagrande, Atlántico</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card fade-in fade-in-delay-1">
+        <div class="test-quote-mark">"</div>
+        <div class="test-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="test-text">I purchased the Soleil ring for my engagement and she cried. AURUM gave us something truly
+          eternal. The quality is unmatched at this price point.</p>
+        <div class="test-author">
+          <div class="test-avatar">V</div>
+          <div>
+            <span class="test-name">Valeria Olivo</span>
+            <span class="test-location">Pivijay, Magdalena</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card fade-in fade-in-delay-2">
+        <div class="test-quote-mark">"</div>
+        <div class="test-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="test-text">Each piece tells a story. The Aurelia bracelet I received has become my everyday luxury —
+          elegant enough for galas, timeless enough for mornings.</p>
+        <div class="test-author">
+          <div class="test-avatar">I</div>
+          <div>
+            <span class="test-name">Isabella Escobar</span>
+            <span class="test-location">Santo Tomás, Atlántico</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ INSTAGRAM GALLERY ═══ -->
+  <section class="gallery">
+    <div class="section-eyebrow fade-in">
+      <div class="diamond-dot"></div>
+      <span>@aurum.jewelry</span>
+      <div class="diamond-dot"></div>
+    </div>
+    <h2 class="section-title fade-in fade-in-delay-1">Our <em>World</em></h2>
+    <div class="divider fade-in fade-in-delay-2"></div>
+
+    <div class="gallery-grid">
+
+      <div class="gallery-item tall fade-in">
+        <div class="gallery-inner">
+          <svg width="80" height="120" viewBox="0 0 80 120" fill="none" opacity="0.2">
+            <path d="M40 8 C18 8 4 36 4 56 C4 90 20 110 40 114 C60 110 76 90 76 56 C76 36 62 8 40 8Z" stroke="#C9A84C"
+              stroke-width="2" />
+            <circle cx="40" cy="114" r="8" fill="#C9A84C" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="gallery-item fade-in fade-in-delay-1">
+        <div class="gallery-inner">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.2">
+            <circle cx="30" cy="30" r="22" stroke="#C9A84C" stroke-width="1.5" />
+            <polygon points="30,14 34,25 46,25 37,33 40,45 30,37 20,45 23,33 14,25 26,25" fill="#C9A84C" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="gallery-item fade-in fade-in-delay-2">
+        <div class="gallery-inner">
+          <svg width="60" height="50" viewBox="0 0 60 50" fill="none" opacity="0.2">
+            <path d="M5 25 Q30 5 55 25 Q30 45 5 25Z" stroke="#C9A84C" stroke-width="1.5" fill="none" />
+            <circle cx="30" cy="14" r="5" fill="#C9A84C" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="gallery-item fade-in fade-in-delay-3">
+        <div class="gallery-inner">
+          <svg width="55" height="55" viewBox="0 0 55 55" fill="none" opacity="0.2">
+            <circle cx="27.5" cy="27.5" r="20" stroke="#C9A84C" stroke-width="1.5" fill="none" />
+            <circle cx="27.5" cy="27.5" r="8" fill="#C9A84C" opacity="0.6" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="gallery-item fade-in fade-in-delay-4">
+        <div class="gallery-inner">
+          <svg width="60" height="80" viewBox="0 0 60 80" fill="none" opacity="0.2">
+            <circle cx="15" cy="12" r="7" stroke="#C9A84C" stroke-width="1.2" fill="none" />
+            <line x1="15" y1="19" x2="15" y2="36" stroke="#C9A84C" stroke-width="1" />
+            <path d="M7 36 L23 36 L19 62 L15 67 L11 62 Z" stroke="#C9A84C" stroke-width="1.2"
+              fill="rgba(201,168,76,0.1)" />
+            <circle cx="45" cy="12" r="7" stroke="#C9A84C" stroke-width="1.2" fill="none" />
+            <line x1="45" y1="19" x2="45" y2="36" stroke="#C9A84C" stroke-width="1" />
+            <path d="M37 36 L53 36 L49 62 L45 67 L41 62 Z" stroke="#C9A84C" stroke-width="1.2"
+              fill="rgba(201,168,76,0.1)" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="gallery-item fade-in fade-in-delay-1" style="grid-column: 2 / 4;">
+        <div class="gallery-inner" style="background: var(--black-3)">
+          <svg width="100" height="60" viewBox="0 0 100 60" fill="none" opacity="0.2">
+            <path d="M50 5L58 22H77L63 33L68 51L50 40L32 51L37 33L23 22H42Z" fill="#C9A84C" />
+          </svg>
+        </div>
+        <div class="gallery-hover">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ NEWSLETTER ═══ -->
+  <section class="newsletter">
+    <div class="newsletter-bg"></div>
+
+    <div class="banner-ornament fade-in">
+      <div class="ornament-line"></div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="3" y="3" width="10" height="10" transform="rotate(45 8 8)" stroke="#C9A84C" stroke-width="0.8" />
+      </svg>
+      <div class="ornament-line r"></div>
     </div>
 
-    <div>
-      <h4 class="footer-col-title">Company</h4>
-      <ul class="footer-links">
-        <li><a href="#">Our Story</a></li>
-        <li><a href="#">Craftsmanship</a></li>
-        <li><a href="#">Sustainability</a></li>
-        <li><a href="#">Press</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
+    <h2 class="newsletter-headline fade-in fade-in-delay-1">
+      Join the <em>Aurum</em> Experience
+    </h2>
+    <p class="newsletter-sub fade-in fade-in-delay-2">
+      Be the first to discover new collections, exclusive offers, and the stories behind each piece.
+    </p>
 
-    <div>
-      <h4 class="footer-col-title">Support</h4>
-      <ul class="footer-links">
-        <li><a href="#">Size Guide</a></li>
-        <li><a href="#">Shipping</a></li>
-        <li><a href="#">Returns</a></li>
-        <li><a href="#">Care Guide</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">hello@aurum.co</a></li>
-      </ul>
-    </div>
-  </div>
+    <!-- Cambiamos el div por un form y añadimos IDs -->
+    <form id="subscribe-form" class="newsletter-form fade-in fade-in-delay-3">
+      <input id="email-input" class="newsletter-input" type="email" placeholder="Your email address" required />
+      <button id="submit-btn" type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+    <!-- Este párrafo se actualizará con el mensaje de éxito/error -->
+    <p id="form-message" class="newsletter-note fade-in fade-in-delay-4">No spam, ever. Unsubscribe at any time.</p>
 
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2026 AURUM Fine Jewelry. All rights reserved.</p>
-    <div class="footer-legal">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Cookie Settings</a>
-    </div>
-  </div>
-</footer>
 
-<script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-function animateRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animateRing);
-}
-animateRing();
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">
+            <a href="#" class="nav-logo" style="display:inline-flex">
+              <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+                <path d="M15 1.5L19.5 11H27L21 16.5L23.5 26L15 21.5L6.5 26L9 16.5L3 11H10.5Z" fill="#C9A84C"
+                  opacity="0.85" />
+                <path d="M15 5.5L18 12H22.5L18.5 15.5L20 21.5L15 18.5L10 21.5L11.5 15.5L7.5 12H12Z" fill="#080807" />
+                <circle cx="15" cy="15" r="3.5" fill="#C9A84C" opacity="0.5" />
+              </svg>
+              <span class="nav-logo-text">AURUM</span>
+            </a>
+          </div>
+          <p class="footer-tagline">
+            "Crafted for those who<br>understand beauty is eternal."
+          </p>
+          <div class="footer-social">
+            <button class="social-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </button>
+            <button class="social-btn" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24">
+                <path d="M8 20l4-9m0 0c0 2 1 3 3 3s4-2 4-5a7 7 0 10-13.5 2.5" />
+              </svg>
+            </button>
+            <button class="social-btn" aria-label="Facebook">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+              </svg>
+            </button>
+            <button class="social-btn" aria-label="TikTok">
+              <svg viewBox="0 0 24 24">
+                <path d="M9 12a4 4 0 104 4V4a5 5 0 005 5" />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-document.querySelectorAll('a, button, .col-card, .product-card, .gallery-item').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-    ring.style.width = '52px'; ring.style.height = '52px';
-    ring.style.borderColor = 'rgba(201,168,76,0.8)';
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-    ring.style.width = '32px'; ring.style.height = '32px';
-    ring.style.borderColor = 'rgba(201,168,76,0.5)';
-  });
-});
+        <div>
+          <h4 class="footer-col-title">Collections</h4>
+          <ul class="footer-links">
+            <li><a href="#">Rings</a></li>
+            <li><a href="#">Necklaces</a></li>
+            <li><a href="#">Bracelets</a></li>
+            <li><a href="#">Earrings</a></li>
+            <li><a href="#">Watches</a></li>
+            <li><a href="#">New Arrivals</a></li>
+          </ul>
+        </div>
 
-// Navbar scroll
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
-});
+        <div>
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Craftsmanship</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
 
-// Fade-in on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.12 });
+        <div>
+          <h4 class="footer-col-title">Support</h4>
+          <ul class="footer-links">
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Care Guide</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">hello@aurum.co</a></li>
+          </ul>
+        </div>
+      </div>
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 AURUM Fine Jewelry. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+    </footer>
 
-// Trigger hero animations immediately
-setTimeout(() => {
-  document.querySelectorAll('.hero .fade-in').forEach(el => el.classList.add('visible'));
-}, 100);
+    <script>
+      // Custom cursor
+      const cursor = document.getElementById('cursor');
+      const ring = document.getElementById('cursorRing');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        cursor.style.left = mx + 'px';
+        cursor.style.top = my + 'px';
+      });
+      function animateRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
 
-// Subtle hero image parallax on mousemove
-const heroImages = document.querySelector('.hero-images');
-if (heroImages) {
-  document.querySelector('.hero').addEventListener('mousemove', e => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
-    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
-    const cards = heroImages.querySelectorAll('.img-card');
-    cards.forEach((c, i) => {
-      const depth = (i + 1) * 0.5;
-      c.style.transform = c.style.transform.replace(/translate\([^)]+\)/, '') +
-        ` translate(${xPct * depth * 6}px, ${yPct * depth * 4}px)`;
-    });
-  });
-}
-</script>
+      document.querySelectorAll('a, button, .col-card, .product-card, .gallery-item').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+          ring.style.width = '52px'; ring.style.height = '52px';
+          ring.style.borderColor = 'rgba(201,168,76,0.8)';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+          ring.style.width = '32px'; ring.style.height = '32px';
+          ring.style.borderColor = 'rgba(201,168,76,0.5)';
+        });
+      });
+
+      // Navbar scroll
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+      });
+
+      // Fade-in on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+      // Trigger hero animations immediately
+      setTimeout(() => {
+        document.querySelectorAll('.hero .fade-in').forEach(el => el.classList.add('visible'));
+      }, 100);
+
+      // Subtle hero image parallax on mousemove
+      const heroImages = document.querySelector('.hero-images');
+      if (heroImages) {
+        document.querySelector('.hero').addEventListener('mousemove', e => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+          const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+          const cards = heroImages.querySelectorAll('.img-card');
+          cards.forEach((c, i) => {
+            const depth = (i + 1) * 0.5;
+            c.style.transform = c.style.transform.replace(/translate\([^)]+\)/, '') +
+              ` translate(${xPct * depth * 6}px, ${yPct * depth * 4}px)`;
+          });
+        });
+      }
+    </script>
+
+    <script>
+      document.getElementById('subscribe-form').addEventListener('submit', async function (e) {
+        e.preventDefault(); // Evita que la página se recargue
+
+        const email = document.getElementById('email-input').value;
+        const btn = document.getElementById('submit-btn');
+        const message = document.getElementById('form-message');
+
+        // Estado de carga
+        btn.innerText = 'Sending...';
+        btn.disabled = true;
+
+        try {
+          // Enviar datos a Flask
+          const response = await fetch('/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            message.innerText = '¡Gracias! Te has suscrito exitosamente.';
+            message.style.color = 'var(--gold)'; // Le damos el color dorado de tu diseño
+            this.reset(); // Limpia el input
+          } else {
+            message.innerText = data.error || 'Ocurrió un error.';
+            message.style.color = 'red';
+          }
+        } catch (error) {
+          message.innerText = 'Error de conexión con el servidor.';
+          message.style.color = 'red';
+        } finally {
+          // Restaurar el botón
+          btn.innerText = 'Subscribe';
+          btn.disabled = false;
+        }
+      });
+    </script>
+
 </body>
+
 </html>
