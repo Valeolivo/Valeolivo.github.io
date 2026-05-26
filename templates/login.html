@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AURUM - Account</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #050505;
+            color: #f5f0e6;
+            font-family: Georgia, serif;
+        }
+
+        .navbar {
+            height: 70px;
+            padding: 0 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #050505;
+            border-bottom: 1px solid rgba(195, 155, 76, 0.25);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #d6b56d;
+            font-size: 24px;
+            letter-spacing: 10px;
+        }
+
+        .links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            color: #e6ddc8;
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        .icons {
+            color: #d6b56d;
+            display: flex;
+            gap: 18px;
+            font-size: 20px;
+        }
+
+        .form-section {
+            width: 80%;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding-top: 45px;
+            text-align: center;
+        }
+
+        .intro {
+            color: #b9b2a2;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 55px;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            background: transparent;
+            border: 1px solid rgba(214, 181, 109, 0.45);
+            color: #f5f0e6;
+            padding: 18px 22px;
+            font-size: 15px;
+            font-family: Georgia, serif;
+            outline: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #d6cbb8;
+        }
+
+        .row {
+            display: flex;
+            gap: 22px;
+            margin-top: 16px;
+        }
+
+        .row input {
+            width: 50%;
+        }
+
+        textarea {
+            margin-top: 16px;
+            height: 145px;
+            resize: none;
+        }
+
+        button {
+            margin-top: 25px;
+            background: #d6b56d;
+            color: #050505;
+            border: none;
+            padding: 18px 70px;
+            font-size: 12px;
+            letter-spacing: 4px;
+            font-family: Georgia, serif;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #c39b4c;
+        }
+
+        .back {
+            display: block;
+            margin-top: 28px;
+            color: #d6b56d;
+            text-decoration: none;
+            letter-spacing: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">☆ AURUM</div>
+
+        <div class="links">
+            <span>HOME</span>
+            <span>COLLECTIONS</span>
+            <span>RINGS</span>
+            <span>NECKLACES</span>
+            <span>BRACELETS</span>
+            <span>EARRINGS</span>
+            <span>WATCHES</span>
+            <span>ABOUT</span>
+        </div>
+
+        <div class="icons">
+            <span>⌕</span>
+            <span>♙</span>
+            <span>▢</span>
+        </div>
+    </nav>
+
+    <section class="form-section">
+        <p class="intro">
+            Be the first to discover new collections, exclusive offers, and the stories<br>
+            behind each piece
+        </p>
+
+        <form method="POST" action="/contact">
+            <input type="text" name="fullname" placeholder="Full name" required>
+
+            <div class="row">
+                <input type="email" name="email" placeholder="Email address" required>
+                <input type="text" name="phone" placeholder="Phone number" required>
+            </div>
+
+            <textarea name="message" placeholder="Message" required></textarea>
+
+            <button type="submit">SEND MESSAGE</button>
+        </form>
+
+        <a class="back" href="/">BACK TO HOME</a>
+    </section>
+</body>
+</html>

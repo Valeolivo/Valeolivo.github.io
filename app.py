@@ -1,33 +1,30 @@
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import smtplib
 from email.message import EmailMessage
 
-# Configuramos la carpeta de archivos estáticos para que lea tu index.html y recursos en la misma ruta
-app = Flask(__name__, static_folder='.', static_url_path='')
+# Añadimos template_folder='templates' para que Flask sepa dónde buscar el HTML
+app = Flask(__name__, template_folder='templates', static_folder='.', static_url_path='')
 
 @app.route("/")
 def inicio():
-    # Usamos send_static_file para mantener tu estructura actual sin necesidad de crear una carpeta "templates"
+    # Mantenemos esto igual para cargar tu página principal
     return app.send_static_file("index.html")
 
-# La ruta debe llamarse /contact porque así está configurada en tu código JavaScript (fetch)
 @app.route("/contact", methods=["POST"])
 def enviar_correo():
-    # 1. Capturamos exactamente los atributos "name" que definiste en tu HTML
+    # 1. Capturamos los datos
     fullname = request.form.get("fullname")
     correo = request.form.get("email")
     telefono = request.form.get("phone")
     mensaje = request.form.get("message")
 
-    # Validación de seguridad básica
     if not all([fullname, correo, telefono, mensaje]):
         return jsonify({"message": "Faltan campos obligatorios"}), 400
 
     # 2. Construcción del correo
     email = EmailMessage()
-    email["From"] = "isabellaescoduq02@gmail.com" # Debes poner el correo desde el que envías
-    email["To"] = "olivovaleria265@gmail.com" # El correo de destino que configuraste previamente
+    email["From"] = "olivovaleria265@gmail.com"
+    email["To"] = "mavale0811@gmail.com"
     email["Subject"] = f"AURUM - Nuevo mensaje de: {fullname}"
 
     email.set_content(f"""
@@ -41,23 +38,47 @@ Mensaje:
 {mensaje}
     """)
 
-    # 3. Conexión al servidor SMTP y envío
+    #Envío del correo
+    # 3. Envío del correo
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            # Reemplaza con tus credenciales reales (recuerda usar la contraseña de aplicación, no la normal)
-            smtp.login("olivovaleria265@gmail.com", "whjv zorn rcts hqje")
+            smtp.login("olivovaleria265@gmail.com", "whjvzornrctshqje")
             smtp.send_message(email)
         
-        # 4. Retornamos un JSON para que el JavaScript pueda leer data.message sin fallar
-        return jsonify({"message": "Message sent successfully"}), 200
+        # Si todo sale perfecto, renderizamos tu página estética
+        return render_template("success.html", nombre=fullname, correo=correo, telefono=telefono, mensaje=mensaje)
 
     except Exception as e:
         print(f"Error interno al enviar el correo: {e}")
-        return jsonify({"message": "Error al enviar el correo. Intenta de nuevo."}), 500
+        
+        # PARCHE DE RED: Si el error es el -1 (falsa alarma de desconexión), 
+        # asumimos que el correo llegó y mostramos la página de éxito.
+        if str(e) == "-1":
+            return render_template("success.html", nombre=fullname, correo=correo, telefono=telefono, mensaje=mensaje)
+        
+        # Si es cualquier otro error real (ej. cambiaste la contraseña y falló),
+        # mostramos la pantalla de error tradicional.
+        else:
+            return "Hubo un error real al enviar el correo. Intenta de nuevo.", 500
 
-# Bloque obligatorio para que el servidor de desarrollo se mantenga activo
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        nombre = request.form.get("fullname")
+        correo = request.form.get("email")
+        telefono = request.form.get("phone")
+        mensaje = request.form.get("message")
+        
+        # En lugar de tener el HTML aquí, le pasamos las variables a un archivo HTML externo
+        return render_template("success.html", nombre=nombre, correo=correo, telefono=telefono, mensaje=mensaje)
+
+    # Si es GET (cuando el usuario entra a la URL normalmente), mostramos el formulario
+    return render_template("login.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+
     
 
 

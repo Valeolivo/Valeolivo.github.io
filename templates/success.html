@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AURUM - Message Sent</title>
+    <style>
+        body {
+            margin: 0;
+            background: #050505;
+            color: #f5f0e6;
+            font-family: Georgia, serif;
+        }
+
+        .navbar {
+            height: 70px;
+            padding: 0 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #050505;
+            border-bottom: 1px solid rgba(195, 155, 76, 0.25);
+        }
+
+        .logo {
+            color: #d6b56d;
+            font-size: 24px;
+            letter-spacing: 10px;
+        }
+
+        .links {
+            display: flex;
+            gap: 28px;
+            color: #e6ddc8;
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        .box {
+            width: 75%;
+            margin: 100px auto;
+            border: 1px solid rgba(214, 181, 109, 0.45);
+            padding: 45px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        h1 {
+            color: #d6b56d;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 17px;
+            color: #ddd;
+        }
+
+        a {
+            color: #d6b56d;
+            text-decoration: none;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">☆ AURUM</div>
+        <div class="links">
+            <span>HOME</span>
+            <span>COLLECTIONS</span>
+            <span>RINGS</span>
+            <span>NECKLACES</span>
+            <span>BRACELETS</span>
+            <span>EARRINGS</span>
+            <span>WATCHES</span>
+            <span>ABOUT</span>
+        </div>
+    </nav>
+
+    <div class="box">
+        <h1>Message sent successfully</h1>
+        <p><strong>Name:</strong> {{ nombre }}</p>
+        <p><strong>Email:</strong> {{ correo }}</p>
+        <p><strong>Phone:</strong> {{ telefono }}</p>
+        <p><strong>Message:</strong> {{ mensaje }}</p>
+        <br>
+        <a href="/">BACK TO HOME</a>
+    </div>
+</body>
+</html>
