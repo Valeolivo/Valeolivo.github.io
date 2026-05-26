@@ -2164,21 +2164,21 @@ textarea:-webkit-autofill:focus {
     </p>
 
     <!-- Cambiamos el div por un form y añadimos IDs -->
-    <form id="contact-form" class="contact-form-container fade-in fade-in-delay-3" action="/contact" method="POST">
-      <div class="form-row">
-        <input id="name-input" class="newsletter-input contact-field" type="text" placeholder="Your full name" required name="fullname" />
-      </div>
-      <div class="form-row input-group">
-        <input id="email-input" class="newsletter-input contact-field-half" type="email" placeholder="Your enmail address" required name="email" />
-        <input id="phone-input" class="newsletter-input contact-field-half" type="tel" placeholder="Phone number" required name="phone" />
-      </div>
-      <div class="form-row">
-        <textarea id="message-input" class="newsletter-input contact-field contact-textarea" placeholder="Your message" required name="message" rows="6"></textarea>
-      </div>
-      <div class="form-row form-submit-row">
-        <button id="contact-submit-btn" type="submit" class="newsletter-btn contact-submit-btn">Send message</button>
-      </div>
-    </form>
+    <form id="contact-form" class="contact-form-container" action="/contact" method="POST">
+  <div class="form-row">
+    <input id="name-input" class="newsletter-input contact-field" type="text" placeholder="Your full name" required name="fullname" />
+  </div>
+  <div class="form-row input-group">
+    <input id="email-input" class="newsletter-input contact-field-half" type="email" placeholder="Your email address" required name="email" />
+    <input id="phone-input" class="newsletter-input contact-field-half" type="tel" placeholder="Phone number" required name="phone" />
+  </div>
+  <div class="form-row">
+    <textarea id="message-input" class="newsletter-input contact-field contact-textarea" placeholder="Your message" required name="message" rows="6"></textarea>
+  </div>
+  <div class="form-row form-submit-row">
+    <button id="contact-submit-btn" type="submit" class="newsletter-btn contact-submit-btn">Send message</button>
+  </div>
+</form>
     
     <!-- ═══ FOOTER ═══ -->
     <footer>
@@ -2344,46 +2344,40 @@ textarea:-webkit-autofill:focus {
     </script>
 
     <script>
-  document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault(); 
-
-    const btn = document.getElementById('submit-btn');
-    const message = document.getElementById('form-message');
-
-    // Obtenemos los valores por ID
-    const formData = {
-      fullname: document.getElementById('name-input').value,
-      email: document.getElementById('email-input').value,
-      phone: document.getElementById('phone-input').value,
-      message: document.getElementById('message-input').value
-    };
-
+document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const btn = document.getElementById('contact-submit-btn');
     btn.innerText = 'Sending...';
     btn.disabled = true;
 
-    try {
-      const response = await fetch('/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+    // Se recolectan los datos usando los atributos 'name' del formulario
+    const formData = new FormData(this);
 
-      if (response.ok) {
-        message.innerText = '¡Mensaje enviado con éxito!';
-        message.style.color = 'var(--gold)';
-        this.reset(); 
-      } else {
-        message.innerText = 'Ocurrió un error. Inténtalo de nuevo.';
-        message.style.color = 'red';
-      }
-    } catch (error) {
-      message.innerText = 'Error de conexión.';
-      message.style.color = 'red';
-    } finally {
-      btn.innerText = 'Send message';
-      btn.disabled = false;
-    }
-  });
+    fetch('/contact', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        // Validación crucial: verifica si el servidor respondió con éxito (código 200)
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message); // Muestra el mensaje de éxito enviado por Flask
+        this.reset();        // Limpia el formulario
+    })
+    .catch(error => {
+        // Manejo de error mejorado para facilitar la corrección
+        alert('Hubo un error al enviar el mensaje. Revisa la consola para más detalles.');
+        console.error('Detalle del error fetch:', error);
+    })
+    .finally(() => {
+        btn.innerText = 'Send message';
+        btn.disabled = false;
+    });
+});
 </script>
 </body>
 
