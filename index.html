@@ -1642,12 +1642,6 @@ textarea:-webkit-autofill:focus {
   .img-card-5 {
     left: 350px;
   }}
-  .video-galeria {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block; /* El truco anti-espacios para el celular */
-        }
   </style>
 </head>
 
@@ -2117,19 +2111,18 @@ textarea:-webkit-autofill:focus {
 
     <div class="story-right fade-in fade-in-delay-2">
       <div class="story-gold-line"></div>
-      <div class="gallery-item tall fade-in">
-  <div class="gallery-inner">
-    <video style="width: 100%; height: 100%; object-fit: cover; display: block;" autoplay loop muted playsinline>
-      <source src="img/Video_aurum.mp4" type="video/mp4">
-      Tu navegador no soporta la etiqueta de video.
-    </video>
-  </div>
-  <div class="gallery-hover">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-    </svg>
-  </div>
-</div>
+      <div class="story-img-main">
+        <img src="img/anillos.png" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
+        <div style="position:absolute;bottom:24px;left:24px;">
+          <p style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">
+            Master Craft</p>
+          <p style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--champagne)">Since 2013</p>
+        </div>
+      </div>
+      <div class="story-img-accent">
+        <img src="img/negra.jpg" alt="Empress Ring Set" width="100%" height="100%" style="object-fit: cover;">
+      </div>
+    </div>
   </section>
 
   <!-- ═══ TESTIMONIALS ═══ -->
@@ -2212,7 +2205,7 @@ textarea:-webkit-autofill:focus {
 
       <div class="gallery-item tall fade-in">
         <div class="gallery-inner">
-          <img src="img/anillos.png" alt="Design" style="width: 100%; height: 100%; object-fit: cover;">
+          <img src="img/photo_linda.jpg" alt="Design" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <div class="gallery-hover">
           <svg viewBox="0 0 24 24">
@@ -2275,18 +2268,19 @@ textarea:-webkit-autofill:focus {
         </div>
       </div>
 
-      <div class="gallery-item fade-in fade-in-delay-1" style="grid-column: 2 / 4;">
-        <div class="gallery-inner" style="background: var(--black-3)">
-          <img src="img/ig_gallery.jpeg" alt="Thoughtful design" style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-        <div class="gallery-hover">
-          <svg viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21 15 16 10 5 21" />
-          </svg>
-        </div>
-      </div>
+      <div class="gallery-item tall fade-in">
+  <div class="gallery-inner">
+    <video style="width: 100%; height: 100%; object-fit: cover;" autoplay loop muted playsinline>
+      <source src="img/Video_aurum.mp4" type="video/mp4">
+      Tu navegador no soporta la etiqueta de video.
+    </video>
+  </div>
+  <div class="gallery-hover">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+    </svg>
+  </div>
+</div>
 
     </div>
   </section>
