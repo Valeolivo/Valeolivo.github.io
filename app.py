@@ -7,7 +7,7 @@ app = Flask(__name__, template_folder='templates', static_folder='.', static_url
 
 @app.route("/")
 def inicio():
-    # Mantenemos esto igual para cargar tu página principal
+    # Mantenemos esto igual para cargar la página principal
     return app.send_static_file("index.html")
 
 @app.route("/contact", methods=["POST"])
