@@ -7,9 +7,6 @@ from email.message import EmailMessage
 # 1. Enciende la herramienta para leer el archivo .env seguro
 load_dotenv() 
 
-print(f"CORREO DETECTADO POR SERVIDOR: {os.getenv('MAIL_USERNAME')}")
-print(f"¿LA CONTRASEÑA EXISTE?: {os.getenv('MAIL_PASSWORD') is not None}")
-
 # Añadimos template_folder='templates' para que Flask sepa dónde buscar el HTML
 app = Flask(__name__, template_folder='templates', static_folder='.', static_url_path='')
 
