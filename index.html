@@ -1480,6 +1480,168 @@ textarea:-webkit-autofill:focus {
     -webkit-text-fill-color: var(--champagne) !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+    /* Para que sea responsive */
+
+@media (max-width: 1200px) {
+
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bestsellers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .test-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+/* Tablets porque uno nunca sabe*/
+@media (max-width: 900px) {
+
+  nav {
+    padding: 0 24px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 120px;
+  }
+
+  .hero-left {
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .hero-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-right {
+    height: 600px;
+  }
+
+  .hero-images {
+    padding: 40px 20px;
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
+
+  .collections,
+  .bestsellers,
+  .banner,
+  .story,
+  .testimonials,
+  .gallery,
+  .newsletter,
+  footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .story {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+}
+/* Celular */
+@media (max-width: 600px) {
+
+  .hero-headline {
+    font-size: 48px;
+  }
+
+  .section-title,
+  .banner-headline,
+  .newsletter-headline,
+  .story-headline {
+    font-size: 38px;
+  }
+
+  .collections-grid,
+  .bestsellers-grid,
+  .gallery-grid,
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-rows: auto;
+  }
+
+  .gallery-item,
+  .gallery-item.tall {
+    grid-row: auto;
+    height: 220px;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-btn {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .footer-legal {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-images {
+    transform: scale(0.55);
+    height: 500px;
+  }
+
+  .img-card-1 {
+    left: -40px;
+  }
+
+  .img-card-2 {
+    left: 90px;
+  }
+
+  .img-card-3 {
+    left: 190px;
+  }
+
+  .img-card-4 {
+    left: 280px;
+  }
+
+  .img-card-5 {
+    left: 350px;
+  }}
   </style>
 </head>
 
